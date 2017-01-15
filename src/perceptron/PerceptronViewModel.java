@@ -23,8 +23,7 @@ public class PerceptronViewModel {
     private static final int NUM_EPOCH = 2000;
     private static final double LEARNING_RATE = 1d;
     
-    private final GaussianDistribution gaussian1;
-    private final GaussianDistribution gaussian2;
+    private final Random random;
     private final double[][] trainData;
     private final int[] trainLabels;
     private final double[][] testData;
@@ -39,9 +38,7 @@ public class PerceptronViewModel {
     private StringProperty recallProperty = new SimpleStringProperty();
             
     public PerceptronViewModel() {
-        Random random = new Random(1234);
-        gaussian1 = new GaussianDistribution(-2.0, 1.0, random);
-        gaussian2 = new GaussianDistribution(2.0, 1.0, random);
+        random = new Random(1234);
         trainData = new double[NUM_TRAIN][NUM_DIMENSION];
         trainLabels = new int[NUM_TRAIN];
         testData = new double[NUM_TEST][NUM_DIMENSION];
@@ -150,14 +147,14 @@ public class PerceptronViewModel {
     private void generateTrainData() {
         IntStream.range(0, NUM_TRAIN / 2)
                 .forEach(i -> {
-                    trainData[i][0] = gaussian1.random();
-                    trainData[i][1] = gaussian2.random();
+                    trainData[i][0] = random.nextGaussian() - 2.0;
+                    trainData[i][1] = random.nextGaussian() + 2.0;
                     trainLabels[i] = 1;
                 });
         IntStream.range(NUM_TRAIN / 2, NUM_TRAIN)
                 .forEach(i -> {
-                    trainData[i][0] = gaussian2.random();
-                    trainData[i][1] = gaussian1.random();
+                    trainData[i][0] = random.nextGaussian() + 2.0;
+                    trainData[i][1] = random.nextGaussian() - 2.0;
                     trainLabels[i] = -1;
                 });
     }
@@ -168,14 +165,14 @@ public class PerceptronViewModel {
     private void generateTestData() {
         IntStream.range(0, NUM_TEST / 2)
                 .forEach(i -> {
-                    testData[i][0] = gaussian1.random();
-                    testData[i][1] = gaussian2.random();
+                    testData[i][0] = random.nextGaussian() - 2.0;
+                    testData[i][1] = random.nextGaussian() + 2.0;
                     testLabels[i] = 1;
                 });
         IntStream.range(NUM_TEST / 2, NUM_TEST)
                 .forEach(i -> {
-                    testData[i][0] = gaussian2.random();
-                    testData[i][1] = gaussian1.random();
+                    testData[i][0] = random.nextGaussian() + 2.0;
+                    testData[i][1] = random.nextGaussian() - 2.0;
                     testLabels[i] = -1;
                 });
     }
