@@ -169,7 +169,7 @@ public class PerceptronViewModel {
         IntStream.range(0, NUM_TEST / 2)
                 .forEach(i -> {
                     testData[i][0] = gaussian1.random();
-                    testData[i][0] = gaussian2.random();
+                    testData[i][1] = gaussian2.random();
                     testLabels[i] = 1;
                 });
         IntStream.range(NUM_TEST / 2, NUM_TEST)
