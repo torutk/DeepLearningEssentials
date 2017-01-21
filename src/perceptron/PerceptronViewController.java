@@ -32,7 +32,8 @@ public class PerceptronViewController implements Initializable {
     
     @FXML
     private void doLearning(ActionEvent event) {
-        chart.getData().add(model.getTrainData());
+        model.getTrainData().stream()
+                .forEach(chart.getData()::add);
         model.train();
         model.test();
         model.evaluate();

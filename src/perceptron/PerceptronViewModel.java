@@ -3,6 +3,8 @@
  */
 package perceptron;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 import javafx.beans.property.SimpleStringProperty;
@@ -32,7 +34,7 @@ public class PerceptronViewModel {
     
     private final Perceptron classifier;
     
-    private XYChart.Series trainDataSeries;
+    private List<XYChart.Series> trainDataSeries;
     private StringProperty accuracyProperty = new SimpleStringProperty();
     private StringProperty precisionProperty = new SimpleStringProperty();
     private StringProperty recallProperty = new SimpleStringProperty();
@@ -54,13 +56,23 @@ public class PerceptronViewModel {
      * 
      * @return データ系列
      */
-    XYChart.Series getTrainData() {
+    List<XYChart.Series> getTrainData() {
         if (trainDataSeries != null) {
             return trainDataSeries;
         }
-        trainDataSeries = new XYChart.Series();
-        IntStream.range(0, NUM_TRAIN)
-                .forEach(i -> trainDataSeries.getData().add(new XYChart.Data(trainData[i][0], trainData[i][1])));
+        trainDataSeries = new ArrayList<>();
+        XYChart.Series trainDataSeries1 = new XYChart.Series();
+        IntStream.range(0, NUM_TRAIN / 2)
+                .mapToObj(i -> new XYChart.Data(trainData[i][0], trainData[i][1]))
+                .forEach(data -> trainDataSeries1.getData().add(data));
+        trainDataSeries.add(trainDataSeries1);
+        
+        XYChart.Series trainDataSeries2 = new XYChart.Series();
+        IntStream.range(NUM_TRAIN / 2, NUM_TRAIN)
+                .mapToObj(i -> new XYChart.Data(trainData[i][0], trainData[i][1]))
+                .forEach(data -> trainDataSeries2.getData().add(data));
+        trainDataSeries.add(trainDataSeries2);
+        
         return trainDataSeries;
     }
     
