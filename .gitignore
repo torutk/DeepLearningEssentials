@@ -2,7 +2,7 @@
 # Created by https://www.gitignore.io/api/java,netbeans
 
 ### NetBeans ###
-nbproject/private/
+**/nbproject/private/
 build/
 nbbuild/
 dist/
@@ -27,4 +27,3 @@ nbdist/
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# End of https://www.gitignore.io/api/java,netbeans
