@@ -1,0 +1,12 @@
+/*
+© 2017 TAKAHASHI,Toru
+*/
+/* 
+    Created on : 2017/01/14, 22:08:38
+    Author     : toru
+*/
+
+.chart-symbol {
+    -fx-background-radius: 2px;
+    -fx-padding: 2px;
+}
