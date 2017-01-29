@@ -30,7 +30,7 @@ public class PerceptronViewModel {
     private int[] trainLabels;
     private double[][] testData;
     private int[] testLabels;
-    private final int[] predicted;
+    private int[] predicted;
     
     private final Perceptron classifier;
     
@@ -82,10 +82,9 @@ public class PerceptronViewModel {
     void train() {
         int epoch = 0;
         while (true) {
-            int classified  = 0;
-            for (int i = 0; i < NUM_TRAIN; i++) {
-                classified += classifier.train(trainData[i], trainLabels[i], LEARNING_RATE);
-            }
+            int classified  = IntStream.range(0, NUM_TRAIN)
+                    .map(i -> classifier.train(trainData[i], trainLabels[i], LEARNING_RATE))
+                    .sum();
             if (classified == NUM_TRAIN) {
                 break;
             }
@@ -100,9 +99,9 @@ public class PerceptronViewModel {
      * テストの実行
      */
     void test() {
-        for (int i = 0; i < NUM_TEST; i++) {
-            predicted[i] = classifier.predict(testData[i]);
-        }
+        predicted = IntStream.range(0, NUM_TEST)
+                .map(i -> classifier.predict(testData[i]))
+                .toArray();
     }
     
     /**
