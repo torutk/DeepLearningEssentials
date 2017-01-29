@@ -26,10 +26,10 @@ public class PerceptronViewModel {
     private static final double LEARNING_RATE = 1d;
     
     private final Random random;
-    private final double[][] trainData;
-    private final int[] trainLabels;
-    private final double[][] testData;
-    private final int[] testLabels;
+    private double[][] trainData;
+    private int[] trainLabels;
+    private double[][] testData;
+    private int[] testLabels;
     private final int[] predicted;
     
     private final Perceptron classifier;
@@ -157,36 +157,38 @@ public class PerceptronViewModel {
      * トレーニングデータの生成
      */
     private void generateTrainData() {
-        IntStream.range(0, NUM_TRAIN / 2)
-                .forEach(i -> {
-                    trainData[i][0] = random.nextGaussian() - 2.0;
-                    trainData[i][1] = random.nextGaussian() + 2.0;
-                    trainLabels[i] = 1;
-                });
-        IntStream.range(NUM_TRAIN / 2, NUM_TRAIN)
-                .forEach(i -> {
-                    trainData[i][0] = random.nextGaussian() + 2.0;
-                    trainData[i][1] = random.nextGaussian() - 2.0;
-                    trainLabels[i] = -1;
-                });
+        trainData = IntStream.range(0, NUM_TRAIN)
+                .map(i -> (i < NUM_TRAIN / 2 ? 1 : -1))
+                .mapToObj(this::generateDatum)
+                .toArray(double[][]::new);
+
+        trainLabels = IntStream.range(0, NUM_TRAIN)
+                .map(i -> (i < NUM_TRAIN / 2 ? 1 : -1))
+                .toArray();
     }
 
+    private double[] generateDatum(int klass) {
+        double x1, x2;
+        if (klass == 1) {
+            x1 = random.nextGaussian() - 2.0;
+            x2 = random.nextGaussian() + 2.0;
+        } else {
+            x1 = random.nextGaussian() + 2.0;
+            x2 = random.nextGaussian() - 2.0;
+        }
+        return new double[] { x1, x2 };
+    }
     /**
      * 評価データの生成
      */
     private void generateTestData() {
-        IntStream.range(0, NUM_TEST / 2)
-                .forEach(i -> {
-                    testData[i][0] = random.nextGaussian() - 2.0;
-                    testData[i][1] = random.nextGaussian() + 2.0;
-                    testLabels[i] = 1;
-                });
-        IntStream.range(NUM_TEST / 2, NUM_TEST)
-                .forEach(i -> {
-                    testData[i][0] = random.nextGaussian() + 2.0;
-                    testData[i][1] = random.nextGaussian() - 2.0;
-                    testLabels[i] = -1;
-                });
+        testData = IntStream.range(0, NUM_TEST)
+                .map(i -> i < NUM_TEST / 2 ? 1 : -1)
+                .mapToObj(this::generateDatum)
+                .toArray(double[][]::new);
+        testLabels = IntStream.range(0, NUM_TEST)
+                .map(i -> i < NUM_TEST / 2 ? 1: -1)
+                .toArray();
     }
 
 }
